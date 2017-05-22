@@ -1,13 +1,4 @@
 #!/usr/bin/env python
-#
-# Solves 24 problems
-#
-# Example1: 1,2,3,4 --> 2+1 = 3+3 = 6*4 = 24
-#
-# Example2: 2,2,2,4 --> 2+2 = 4+2 = 6*4 = 24
-#
-#
-
 class Arith(object):
  def __init__(self,a,b):
   self.a = max(a,b)
@@ -24,9 +15,9 @@ class Arith(object):
 
  def div(self):
   try:
-   return self.a/self.b
-  except:
-   return 0
+   n=round(self.a/eval(str('{}.0'.format(self.b))),3)
+   return self.a/self.b if '.0' in str(n) else n
+  except:return 0
 
  def combs(self):
   arith=[self.add(),self.sub(),self.mul(),self.div()]
