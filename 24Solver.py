@@ -23,7 +23,10 @@ class Arith(object):
   return self.a*self.b
 
  def div(self):
-  return self.a/self.b
+  try:
+   return self.a/self.b
+  except:
+   return 0
 
  def combs(self):
   arith=[self.add(),self.sub(),self.mul(),self.div()]
@@ -34,10 +37,6 @@ class Solution(object):
   self.list = lst
   self.mem  = []
 
- def filter(self,lst):
-  # takes zeros from list
-  return [n for n in lst if n]
-
  def solve(self):
   for a,alpha in enumerate(self.list):
    for b,delta in enumerate(self.list): # Stage 1  [3,1,2,2] --> [1,2,3]
@@ -47,18 +46,19 @@ class Solution(object):
     theta=self.list[_[1]]
 
     # method 1
-    for num1,comb1 in enumerate(self.filter(Arith(alpha,delta).combs())):
+    for num1,comb1 in enumerate(Arith(alpha,delta).combs()):
      if num1:del self.mem[:]
      # rearrange the order of alpha & delta - instead of 1-2=1 make it 2-1=1
      alpha1=alpha if alpha>=delta else delta
      delta1=alpha if alpha1==delta else delta
 
      # get sign of the current action
-     sign='+' if not num1 else '-' if num1==1 else 'x' if num1==2 else '/'
+     sign='+' if num1==0 else '-' if num1==1 else 'x' if num1==2 else '/'
      self.mem.append('{}{}{}={}  '.format(alpha1,sign,delta1,comb1))
 
+
      # combine the combination of alpha & delta with gamma
-     for num2,comb2 in enumerate(self.filter(Arith(comb1,gamma).combs())):
+     for num2,comb2 in enumerate(Arith(comb1,gamma).combs()):
       if num2:
        del self.mem[1:]
       # rearrange the order of comb1 & gamma
@@ -70,8 +70,8 @@ class Solution(object):
       self.mem.append('{}{}{}={}  '.format(_comb1,sign,_gamma,comb2))
 
       #combine the combination of comb1 & gamma with theta
-      for num3,comb3 in enumerate(self.filter(Arith(comb2,theta).combs())):
-       # rearrange the of comb2 & theta
+      for num3,comb3 in enumerate(Arith(comb2,theta).combs()):
+       # rearrange the of order
        _comb2=comb2 if comb2>=theta else theta
        _theta=comb2 if _comb2==theta else theta
 
@@ -80,13 +80,13 @@ class Solution(object):
        self.mem.append('{}{}{}={}  '.format(_comb2,sign,_theta,comb3))
        if comb3==24:
         if len(self.mem)==3:
-         exit('\n{}\n'.format(self.cleanDisplay(self.mem)))
+         print('\n{}\n'.format(self.cleanDisplay(self.mem)))
        del self.mem[-1]
 
     # method 2
-    for num,comb in enumerate(self.filter(Arith(alpha,delta).combs())):
+    for num,comb in enumerate(Arith(alpha,delta).combs()):
      del self.mem[:]
-     # rearrange the order of alpha & delta - instead of 1-2=1 make it 2-1=1
+     # rearrange the order
      alpha1=alpha if alpha>=delta else delta
      delta1=alpha if alpha1==delta else delta
 
@@ -94,9 +94,9 @@ class Solution(object):
      sign='+' if not num else '-' if num==1 else 'x' if num==2 else '/'
      self.mem.append('{}{}{}={}  '.format(alpha1,sign,delta1,comb))
 
-     for num1,comb1 in enumerate(self.filter(Arith(gamma,theta).combs())):
+     for num1,comb1 in enumerate(Arith(gamma,theta).combs()):
       if num1:del self.mem[1:]
-      # rearrange the order of gamma & theta - instead of 1-2=1 make it 2-1=1
+      # rearrange the order
       gamma1=gamma if gamma>=theta else theta
       theta1=gamma if gamma1==theta else theta
 
@@ -105,8 +105,8 @@ class Solution(object):
       self.mem.append('{}{}{}={}  '.format(gamma1,sign,theta1,comb1))
 
       # combine comb & comb1
-      for num2,comb2 in enumerate(self.filter(Arith(comb,comb1).combs())):
-       # rearrange the order of gamma & theta - instead of 1-2=1 make it 2-1=1
+      for num2,comb2 in enumerate(Arith(comb,comb1).combs()):
+       # rearrange the order
        phi=comb if comb>=comb1 else comb1
        pi=comb if phi==comb1 else comb1
 
@@ -115,7 +115,7 @@ class Solution(object):
        self.mem.append('{}{}{}={}  '.format(phi,sign,pi,comb2))
        if len(self.mem)==3:
         if comb2==24:
-         exit('\n{}\n'.format(self.cleanDisplay(self.mem)))
+         print('\n{}\n'.format(self.cleanDisplay(self.mem)))
        del self.mem[-1]
 
  def cleanDisplay(self,lst):
