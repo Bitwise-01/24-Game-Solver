@@ -56,7 +56,6 @@ class Solution(object):
      sign='+' if num1==0 else '-' if num1==1 else 'x' if num1==2 else '/'
      self.mem.append('{}{}{}={}  '.format(alpha1,sign,delta1,comb1))
 
-
      # combine the combination of alpha & delta with gamma
      for num2,comb2 in enumerate(Arith(comb1,gamma).combs()):
       if num2:
