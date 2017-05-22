@@ -1,235 +1,141 @@
-from random import randint
-from os import system
+#!/usr/bin/env python
+#
+# Solves 24 problems
+#
+# Example1: 1,2,3,4 --> 2+1 = 3+3 = 6*4 = 24
+#
+# Example2: 2,2,2,4 --> 2+2 = 4+2 = 6*4 = 24
+#
+#
 
-class Engine(object):
-  def __init__(self,nums):
-    self.list = nums
-   
-  def Organize(self):
-    current,new=self.list,[]
-    while len(current) != 0:
-     new.append(min(current))
-     del current[current.index(min(current))]
-    return new
+class Arith(object):
+ def __init__(self,a,b):
+  self.a = max(a,b)
+  self.b = min(a,b)
 
-  def BruteForce(self):
-    global Processes;Processes=[]
-    for A,num1 in enumerate(self.list):
-     for B,num2 in enumerate(self.list):
-      for C,num3 in enumerate(self.list):
-       for D,num4 in enumerate(self.list):
-        if A!=B and A!=C and A!=D and B!=C and B!=D and C!=D and r!=24: 
-         for i in range(96):
-           try:
-            Result = Connect(Connect(Connect(num1,num2),num3),num4)
-            if Result == 24:
-             display = []
-             for i,k in enumerate(Processes): 
-              if k not in display: 
-               display.append(k) 
-             print ('\n\n{}'.format(''.join(display[-3:])));return
-            else:del Processes[:]
-           except:pass 
+ def add(self):
+  return self.a+self.b
 
+ def sub(self):
+  return self.a-self.b
 
-def Algorithm():
-        global Processes,r;r=0
-        for x,left in enumerate(List):
-	 for y,right in enumerate(List):
-	  
-	  q = []
-	  if x != y:
-	   q.append(left)
-	   q.append(right)
+ def mul(self):
+  return self.a*self.b
 
-	   alpha=(max(q))
-	   beta=(min(q))
-	   
-	   Subsets = Sets(alpha,beta)
-           Alpha,Beta,Gamma,Delta = List[0],List[1],List[2],List[3]
+ def div(self):
+  return self.a/self.b
 
-	   for i,k in enumerate(Subsets):
-	    Process = []
-	    if k in Constants:
-	     Process.append(Steps(alpha,beta,i)) 
-	     num1_pos = List.index(alpha)
-	     num2_pos = List.index(beta)
-	  
-	     alpha,beta,gamma,delta = False,False,False,False 
-	     Alpha_Used,Beta_Used,Gamma_Used,Delta_Used = False,False,False,False
+ def combs(self):
+  arith=[self.add(),self.sub(),self.mul(),self.div()]
+  return arith
 
-	     if num1_pos == 0: alpha = True
-	     elif num1_pos == 1: beta = True
-	     elif num1_pos == 2: gamma = True
-	     elif num1_pos == 3: delta = True
-	     
-	     if num2_pos == 0: alpha = True
-	     elif num2_pos == 1: beta = True
-	     elif num2_pos == 2: gamma = True
-	     elif num2_pos == 3: delta = True
+class Solution(object):
+ def __init__(self,lst):
+  self.list = lst
+  self.mem  = []
 
-	     if alpha and beta: 
-	      Subsets = Sets(Delta,Gamma)
-	      for l,m in enumerate(Subsets):
-	       if m in Constants:
-		if not Delta_Used and not Gamma_Used:
-		 Process.append(Steps(Delta,Gamma,l))
-		 Subsets = Sets(k,m)
-		 for n,r in enumerate(Subsets):
-		  if r == 24: 
-		   Process.append(Steps(m,k,n) if m >= k else Steps(k,m,n))
-		   print '\n\n';print ''.join(Process);return
-		 Delta_Used,Gamma_Used = True,True 
+ def filter(self,lst):
+  # takes zeros from list
+  return [n for n in lst if n]
 
-	     if alpha and gamma:
-	      Subsets = Sets(Delta,Beta)
-	      for l,m in enumerate(Subsets):
-	       if m in Constants:
-		if not Delta_Used and not Beta_Used:
-		 Process.append(Steps(Delta,Beta,l))
-		 Subsets = Sets(k,m)
-		 for n,r in enumerate(Subsets):
-		  if r == 24: 
-		   Process.append(Steps(m,k,n) if m >= k else Steps(k,m,n))
-		   print '\n\n';print ''.join(Process);return
-		 Delta_Used,Beta_Used = True,True
+ def solve(self):
+  for a,alpha in enumerate(self.list):
+   for b,delta in enumerate(self.list): # Stage 1  [3,1,2,2] --> [1,2,3]
+    if a==b:continue
+    _=[_ for _ in range(4) if all([_!=a,_!=b])]
+    gamma=self.list[_[0]]
+    theta=self.list[_[1]]
 
-	     if alpha and delta:
-	      Subsets = Sets(Gamma,Beta)
-	      for l,m in enumerate(Subsets):
-	       if m in Constants:
-		if not Gamma_Used and not Beta_Used:
-		 Process.append(Steps(Gamma,Beta,l))
-		 Subsets = Sets(k,m)
-		 for n,r in enumerate(Subsets):
-		  if r == 24: 
-		   Process.append(Steps(m,k,n) if m >= k else Steps(k,m,n))
-		   print '\n\n';print ''.join(Process);return
-		 Gamma_Used,Beta_Used = True,True
+    # method 1
+    for num1,comb1 in enumerate(self.filter(Arith(alpha,delta).combs())):
+     if num1:del self.mem[:]
+     # rearrange the order of alpha & delta - instead of 1-2=1 make it 2-1=1
+     alpha1=alpha if alpha>=delta else delta
+     delta1=alpha if alpha1==delta else delta
 
-	     if beta  and gamma:
-	      Subsets = Sets(Delta,Alpha)
-	      for l,m in enumerate(Subsets):
-	       if m in Constants:
-		if not Delta_Used and not Alpha_Used:
-		 Process.append(Steps(Delta,Alpha,l))
-		 Subsets = Sets(k,m)
-		 for n,r in enumerate(Subsets):
-		  if r == 24: 
-		   Process.append(Steps(m,k,n) if m >= k else Steps(k,m,n))
-		   print '\n\n';print ''.join(Process);return
-		 Delta_Used,Alpha_Used = True,True
+     # get sign of the current action
+     sign='+' if not num1 else '-' if num1==1 else 'x' if num1==2 else '/'
+     self.mem.append('{}{}{}={}  '.format(alpha1,sign,delta1,comb1))
 
-	     if beta  and delta:
-	      Subsets = Sets(Gamma,Alpha)
-	      for l,m in enumerate(Subsets):
-	       if m in Constants:
-		if not Gamma_Used and not Alpha_Used:
-		 Process.append(Steps(Gamma,Alpha,l))
-		 Subsets = Sets(k,m)
-		 for n,r in enumerate(Subsets):
-		  if r == 24: 
-		   Process.append(Steps(m,k,n) if m >= k else Steps(k,m,n))
-		   print '\n\n';print ''.join(Process);return
-		 Gamma_Used,Alpha_Used = True,True
+     # combine the combination of alpha & delta with gamma
+     for num2,comb2 in enumerate(self.filter(Arith(comb1,gamma).combs())):
+      if num2:
+       del self.mem[1:]
+      # rearrange the order of comb1 & gamma
+      _comb1=comb1 if comb1>=gamma else gamma
+      _gamma=comb1 if _comb1==gamma else gamma
 
-	     if gamma and delta:
-	      Subsets = Sets(Beta,Alpha)
-	      for l,m in enumerate(Subsets):
-	       if m in Constants:
-		if not Beta_Used and not Alpha_Used:
-		 Process.append(Steps(Beta,Alpha,l))
-		 Subsets = Sets(k,m)
-		 for n,r in enumerate(Subsets):
-		  if r == 24: 
-		   Process.append(Steps(m,k,n) if m >= k else Steps(k,m,n))
-		   print '\n\n';print ''.join(Process);return
-		 Beta_Used,Alpha_Used = True,True
-	     alpha=(max(q))
-	     beta=(min(q))
-        
+      # get sign
+      sign='+' if not num2 else '-' if num2==1 else 'x' if num2==2 else '/'
+      self.mem.append('{}{}{}={}  '.format(_comb1,sign,_gamma,comb2))
 
-          
-def Connect(x,y):
-   global Processes
+      #combine the combination of comb1 & gamma with theta
+      for num3,comb3 in enumerate(self.filter(Arith(comb2,theta).combs())):
+       # rearrange the of comb2 & theta
+       _comb2=comb2 if comb2>=theta else theta
+       _theta=comb2 if _comb2==theta else theta
 
-   a,b=max([x,y]),min([x,y])
-   i = randint(0,3)
+       # get sign
+       sign='+' if not num3 else '-' if num3==1 else 'x' if num3==2 else '/'
+       self.mem.append('{}{}{}={}  '.format(_comb2,sign,_theta,comb3))
+       if comb3==24:
+        if len(self.mem)==3:
+         exit('\n{}\n'.format(self.cleanDisplay(self.mem)))
+       del self.mem[-1]
 
-   ops = {0:'({} + {}) = {} '.format(a,b,Add(a,b)),
-          1:'({} - {}) = {} '.format(a,b,Subtract(a,b)),
-          2:'({} / {}) = {} '.format(a,b,Divide(a,b)),
-          3:'({} x {}) = {} '.format(a,b,Multiply(a,b))}
-   Ops = [Add(a,b),Subtract(a,b),Divide(a,b),Multiply(a,b)]
+    # method 2
+    for num,comb in enumerate(self.filter(Arith(alpha,delta).combs())):
+     del self.mem[:]
+     # rearrange the order of alpha & delta - instead of 1-2=1 make it 2-1=1
+     alpha1=alpha if alpha>=delta else delta
+     delta1=alpha if alpha1==delta else delta
 
-   Processes.append(ops[i])
-   return Ops[i]
-            
-def Factors(n):    
- return Engine(reduce(list.__add__,([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0))).Organize()
- 
+     # get sign of the current action
+     sign='+' if not num else '-' if num==1 else 'x' if num==2 else '/'
+     self.mem.append('{}{}{}={}  '.format(alpha1,sign,delta1,comb))
 
-def Isprime(n):
-  if n % 2 == 0:
-   return False
-  if n % 3 == 0:
-   return False
+     for num1,comb1 in enumerate(self.filter(Arith(gamma,theta).combs())):
+      if num1:del self.mem[1:]
+      # rearrange the order of gamma & theta - instead of 1-2=1 make it 2-1=1
+      gamma1=gamma if gamma>=theta else theta
+      theta1=gamma if gamma1==theta else theta
 
-  i,w = 5,2
- 
-  while i * i <= n:
-   if n % i == 0:
-    return False
-   i += w
-   w = 6 - w
-  return True	   
-  
-def Steps(a,b,i):
-  Steps = {0:'({} + {}) = {}  '.format(a,b,Add(a,b)),
-           1:'({} - {}) = {} '.format(a,b,Subtract(a,b)),
-           2:'({} / {}) = {} '.format(a,b,Divide(a,b)),
-           3:'({} x {}) = {} '.format(a,b,Multiply(a,b))}
+      # get sign of the current action
+      sign='+' if not num1 else '-' if num1==1 else 'x' if num1==2 else '/'
+      self.mem.append('{}{}{}={}  '.format(gamma1,sign,theta1,comb1))
 
-  return Steps[i]
+      # combine comb & comb1
+      for num2,comb2 in enumerate(self.filter(Arith(comb,comb1).combs())):
+       # rearrange the order of gamma & theta - instead of 1-2=1 make it 2-1=1
+       phi=comb if comb>=comb1 else comb1
+       pi=comb if phi==comb1 else comb1
 
-def Sets(a,b):
-   return [Add(a,b),Subtract(a,b),Divide(a,b),Multiply(a,b)]	 
+       # get sign of the current action
+       sign='+' if not num2 else '-' if num2==1 else 'x' if num2==2 else '/'
+       self.mem.append('{}{}{}={}  '.format(phi,sign,pi,comb2))
+       if len(self.mem)==3:
+        if comb2==24:
+         exit('\n{}\n'.format(self.cleanDisplay(self.mem)))
+       del self.mem[-1]
 
-def ReadNumbers():
-  Newlist,q = [],[] 
-  
-  for i,item in enumerate(Numbers):
-    if not item.isdigit():
-     Newlist.append(int(''.join(q)));q=[]
-    else:
-     q.append(item)
-    
-  Newlist.append(int(''.join(q)))
-  return Newlist
+ def cleanDisplay(self,lst):
+  return ''.join(lst).rstrip()
 
-def Divide(x,y):
- a,b=max([x,y]),min([x,y])
- if a == b: return 1
- if b == 1: return a
- if not Isprime(a) and b in Factors(a):
-  return a/b
+class Numbers(object):
+ def __init__(self,lst):
+  self.lst = lst
+  self.num = []
+
+ def orginize(self):
+  for item in self.lst:
+   if item.isdigit():
+    self.num.append(item)
+   else:
+    yield eval(''.join(self.num))
+    del self.num[:]
+  if self.num:
+   yield eval(''.join(self.num))
 
 if __name__ == '__main__':
-  Add = lambda x,y: x+y
-  Multiply = lambda x,y: x*y
-  Subtract = lambda x,y: x-y if x >= y else y-x
-  try:
-   while 1:
-    try:
-     system('clear')
-    except:
-     system('cls')
-    finally:
-     deci_process = []
-     Numbers = raw_input('Enter Four Comma Seperated Numbers: ')
-     Constants = [1, 2, 3, 4, 6, 8, 12]
-     List = Engine(ReadNumbers()).Organize()
-     Algorithm()
-     Engine(ReadNumbers()).BruteForce()
-     Continue = raw_input('\n\nPress Enter To Continue')
-  except KeyboardInterrupt: exit('\n\n')
+ lst=list(Numbers(raw_input('Enter 4 number separated by commas: ')).orginize())
+ Solution(lst).solve()
